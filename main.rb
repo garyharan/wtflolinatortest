@@ -54,7 +54,7 @@ configure :test, :development do
     r.deadline = Time.now + (60 * 60 * 3)
   end
   Team.create do |r|
-    r.name = 'StandoutJobs'
+    r.name = 'Standout Jobs'
   end
 end
 
@@ -62,14 +62,15 @@ end
 # Actions
 # --------------------------------------------------
 get '/' do
-  erb(:foo)
+  File.read('views/test.html')
 end
 
 get '/teams/:id' do
   Team[params[:id]].name
 end
 
-get 'meals/:id' do
+get '/meals/:id' do
+  Meal[params[:id]].deadline.to_s
 end
 
 use_in_file_templates!
