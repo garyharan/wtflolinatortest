@@ -43,7 +43,11 @@ end
 configure do
   class Meal < Sequel::Model; end
   class Team < Sequel::Model; end
-  class Person < Sequel::Model; end
+  class Person < Sequel::Model
+    def full_name
+      "#{first_name} #{last_name}"
+    end
+  end
 end
 
 # --------------------------------------------------
@@ -55,6 +59,16 @@ configure :test, :development do
   end
   Team.create do |r|
     r.name = 'Standout Jobs'
+  end
+  Person.create do |r|
+    r.first_name = 'Steve'
+    r.last_name = 'Emploi'
+    r.email = 'steve.e@lunchstatus.com'
+  end
+  Person.create do |r|
+    r.first_name = 'Jack'
+    r.last_name = 'Bauer'
+    r.email = 'dabomb@gmail.com'
   end
 end
 
@@ -71,6 +85,10 @@ end
 
 get '/meals/:id' do
   Meal[params[:id]].deadline.to_s
+end
+
+get '/people/:id' do
+  Person[params[:id]].full_name.to_s
 end
 
 use_in_file_templates!
