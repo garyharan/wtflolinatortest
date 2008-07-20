@@ -56,7 +56,7 @@ end
 # --------------------------------------------------
 get '/' do
   'bar'
-  #erb(:foo)
+  File.read('views/test.html')
 end
 
 get '/team/:id' do
