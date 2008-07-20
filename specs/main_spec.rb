@@ -1,5 +1,10 @@
 require 'specs/spec_helper'
 
-describe "stuff" do
-  it "should just run!"
+describe Meal do
+
+  it "should have deadline" do
+    @meal = Meal.create(:deadline => Time.now)
+    @meal.deadline.should_not be_nil
+  end
+
 end

@@ -9,6 +9,7 @@ Dir[File.join(SINATRA_ROOT, 'vendor/*')].each do |dir|
 end
 
 require 'rubygems'
+require 'ruby-debug'
 require 'sinatra'
 require 'sequel'
 
@@ -61,8 +62,7 @@ end
 # Actions
 # --------------------------------------------------
 get '/' do
-  #erb(:foo)
-  'home'
+  erb(:foo)
 end
 
 get '/teams/:id' do
@@ -77,7 +77,3 @@ use_in_file_templates!
 __END__
 @@ foo
 blah
-
-@@ index
-aksdjfs
-<%= alsf %>
