@@ -1,0 +1,16 @@
+= senarios
+o bunch of people want to agree on place to eat at .. or not
+o people has lunch .. or not
+
+= models
+o Meal
+  - deadline
+o Team
+  has_many :people
+  has_many :meals
+  - name
+o Person
+  belongs_to :team
+  - name
+  - last_name
+  - email
