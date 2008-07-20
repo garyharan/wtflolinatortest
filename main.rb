@@ -12,22 +12,50 @@ require 'rubygems'
 require 'sinatra'
 require 'sequel'
 
-set_option :env, ENV['SINATRA_ENV'].to_sym if ENV['SINATRA_ENV']
+set_option(:env, ENV['SINATRA_ENV'].to_sym) if ENV['SINATRA_ENV']
 
-DB = Sequel.sqlite
+# --------------------------------------------------
+# Database Tables
+# --------------------------------------------------
+configure do
+  DB = Sequel.sqlite
 
-DB.create_table :meals do
-  datetime :deadline
-end
-DB.create_table :team do
-  text :name
-end
-DB.create_table :people do
-  text :first_name
-  text :last_name
-  text :email
+  DB.create_table! :meals do
+    primary_key :id
+    datetime :deadline
+  end
+  DB.create_table! :team do
+    primary_key :id
+    varchar :name
+  end
+  DB.create_table! :people do
+    primary_key :id
+    varchar :first_name
+    varchar :last_name
+    varchar :email
+  end
 end
 
+# --------------------------------------------------
+# Models
+# --------------------------------------------------
+configure do
+  class Meal < Sequel::Model
+  end
+end
+
+# --------------------------------------------------
+# Fixtures
+# --------------------------------------------------
+configure do
+  Meal.create do |r|
+    r.deadline = Time.now + (60 * 60 * 3)
+  end
+end
+
+# --------------------------------------------------
+# Actions
+# --------------------------------------------------
 get '/' do
-  'o hai'
+  Meal.all.inspect
 end
