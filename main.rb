@@ -2,6 +2,12 @@
 # --------------------------------------------------
 # Environment
 # --------------------------------------------------
+SINATRA_ROOT = File.expand_path(File.dirname(__FILE__)) unless defined? SINATRA_ROOT
+
+Dir[File.join(SINATRA_ROOT, 'vendor/*')].each do |dir|
+  $:.unshift "#{File.expand_path(dir)}/lib"
+end
+
 require 'rubygems'
 require 'sinatra'
 require 'sequel'
@@ -55,12 +61,15 @@ end
 # Actions
 # --------------------------------------------------
 get '/' do
-  'bar'
   #erb(:foo)
+  'home'
 end
 
-get '/team/:id' do
+get '/teams/:id' do
   Team[params[:id]].name
+end
+
+get 'meals/:id' do
 end
 
 use_in_file_templates!
@@ -68,3 +77,7 @@ use_in_file_templates!
 __END__
 @@ foo
 blah
+
+@@ index
+aksdjfs
+<%= alsf %>
