@@ -18,7 +18,7 @@ configure do
     primary_key :id
     datetime :deadline
   end
-  DB.create_table! :team do
+  DB.create_table! :teams do
     primary_key :id
     varchar :name
   end
@@ -46,6 +46,9 @@ configure :test, :development do
   Meal.create do |r|
     r.deadline = Time.now + (60 * 60 * 3)
   end
+  Team.create do |r|
+    r.name = 'StandoutJobs'
+  end
 end
 
 # --------------------------------------------------
@@ -54,6 +57,10 @@ end
 get '/' do
   'bar'
   #erb(:foo)
+end
+
+get '/team/:id' do
+  Team[params[:id]].name
 end
 
 use_in_file_templates!
