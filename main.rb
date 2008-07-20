@@ -2,12 +2,6 @@
 # --------------------------------------------------
 # Environment
 # --------------------------------------------------
-SINATRA_ROOT = File.expand_path(File.dirname(__FILE__)) unless defined? SINATRA_ROOT
-
-Dir[File.join(SINATRA_ROOT, 'vendor/*')].each do |dir|
-  $:.unshift "#{File.expand_path(dir)}/lib"
-end
-
 require 'rubygems'
 require 'sinatra'
 require 'sequel'
@@ -40,14 +34,15 @@ end
 # Models
 # --------------------------------------------------
 configure do
-  class Meal < Sequel::Model
-  end
+  class Meal < Sequel::Model; end
+  class Team < Sequel::Model; end
+  class Person < Sequel::Model; end
 end
 
 # --------------------------------------------------
 # Fixtures
 # --------------------------------------------------
-configure do
+configure :test, :development do
   Meal.create do |r|
     r.deadline = Time.now + (60 * 60 * 3)
   end
@@ -57,5 +52,12 @@ end
 # Actions
 # --------------------------------------------------
 get '/' do
-  Meal.all.inspect
+  'bar'
+  #erb(:foo)
 end
+
+use_in_file_templates!
+
+__END__
+@@ foo
+blah
