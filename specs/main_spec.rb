@@ -5,6 +5,10 @@ require 'specs/spec_helper'
 # --------------------------------------------------
 describe Meal do
 
+  before(:each) do
+    @meal = Factory.build(:meal)
+  end
+
   it "should have a deadline" do
     Factory(:meal, :deadline => Time.now)
     Meal.first.deadline.should_not be_nil
@@ -15,14 +19,14 @@ end
 describe Person do
 
   before(:each) do
-    @person = Person.create(:first_name => 'lolcat', :last_name => 'giraffeneck', :email => 'cheezburger@gmail.com')
+    @person = Factory.build(:person)
   end
-
-  it "should have attributes" do
-    @person.keys.each{|attribute| attribute.should_not be_nil}
-  end                   
   
   it "should be able to display a full name" do
-    @person.full_name.should_not be_nil
+    @person.first_name = 'Frank'
+    @person.last_name  = 'Sinatra'
+    @person.full_name.should == 'Frank Sinatra'
+    @person.last_name  = ''
+    @person.full_name.should == 'Frank'
   end
 end
