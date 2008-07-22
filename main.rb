@@ -45,7 +45,7 @@ configure do
   class Team < Sequel::Model; end
   class Person < Sequel::Model
     def full_name
-      "#{first_name} #{last_name}"
+      [first_name, last_name].join(' ').strip
     end
   end
 end
