@@ -47,6 +47,7 @@ describe "/teams/:id" do
   it "should return the team's name" do
     t = Factory(:team, :name => 'cheezburger')
     get_it "/teams/#{t.id}"
+    #@response.body.should have_tag('body p', t.name)
     @response.body.include?(t.name).should be_true
     @response.should be_successful
   end
