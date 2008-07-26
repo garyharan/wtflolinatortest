@@ -12,6 +12,7 @@ require 'rubygems'
 require 'ruby-debug'
 require 'sinatra'
 require 'sequel'
+require 'thin'
 
 set_option(:env, ENV['SINATRA_ENV'].to_sym) if ENV['SINATRA_ENV']
 
