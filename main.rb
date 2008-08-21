@@ -81,7 +81,8 @@ get '/' do
 end
 
 get '/teams/:id' do
-  Team[params[:id]].name
+  @team_name = Team[params[:id]].name
+  erb :teams_show, :views_directory => File.dirname(__FILE__) + "/views"
 end
 
 get '/meals/:id' do
