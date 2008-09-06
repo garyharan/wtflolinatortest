@@ -77,7 +77,7 @@ end
 # Actions
 # --------------------------------------------------
 get '/' do
-  File.read('views/test.html')
+  erb :home, :views_directory => File.dirname(__FILE__) + "/views"
 end
 
 get '/teams/:id' do

@@ -1,6 +1,6 @@
 require 'tests/test_helper'
 require File.join(File.dirname(__FILE__), '../main')
-puts $"
+
 # --------------------------------------------------
 # Models
 # --------------------------------------------------
@@ -41,9 +41,19 @@ end
 # Actions
 # --------------------------------------------------
 context "root" do
-  specify "should show a default page" do
+  specify "should show a default page with a name form" do
     get_it '/'
     should.be.ok
+    body.should.include?("username")
+    body.should.include?("organization")
+  end
+  
+  specify "should allow user to type in a name and save it" do
+    
+  end
+  
+  specify "should show an existing name if one was previously saved (from cookies)" do
+    
   end
 end
 
