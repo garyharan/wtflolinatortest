@@ -1,0 +1,26 @@
+test/spec/extended by Dean Strelau <dean@strelau.net>
+
+This little plugin gives some more nice methods for writing test/specs.
+
+Installation
+------------
+ * make sure you have test-spec
+ * install this plugin
+ * require 'test/spec/extended' in test_helper.rb
+
+Should Change
+-------------
+  lambda { @instance.bar += 1 }.should change(@instance, :bar)
+  lambda { @instance.bar += 0 }.should.not change(@instance, :bar)
+
+  # works with any objects that can be compared
+  lambda { @instance.bar << '_updated' }.should change(@instance, :bar)
+
+  # or specify a certain value
+  lambda { @instance.bar += 1 }.should change(@instance, :bar).by( 1 )
+
+  # or anything that supports the difference operator
+  lambda { @instance.bar << [2] }.should change(@instance, :bar).by( [2] )
+
+  # should.not doesn't support by() though!!
+  lambda { }.should.not change(@instance, :bar).by(1) #=> DefinitionError

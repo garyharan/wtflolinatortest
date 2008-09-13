@@ -19,6 +19,18 @@ describe "Person" do
   before(:each) do
     @person = Factory.build(:person)
   end
+  
+  it "should save" do
+    test_person = Person.create do |r|
+      r.first_name = 'Jack'
+      r.last_name = 'Bauer'
+      r.email = 'dabomb@gmail.com'
+      r.user_name = 'dabomb'
+    end
+    test_person.should.not.be.nil
+    test_person.first_name.should.equal 'Jack'
+    test_person.user_name.should.equal 'dabomb'
+  end
 
   it "should be able to display a full name" do
     @person.first_name = 'Frank'
@@ -54,6 +66,14 @@ context "root" do
   
   specify "should show an existing name if one was previously saved (from cookies)" do
     
+  end
+end
+
+context "/people/create" do
+  specify "should create a person" do
+    lambda {
+        post_it "/people/create", {:username => "Jack", :organization => "Sheppard"}
+    }.should change(Person.dataset, 'count').by(1)
   end
 end
 

@@ -34,6 +34,7 @@ configure do
     primary_key :id
     varchar :first_name
     varchar :last_name
+    varchar :user_name
     varchar :email
   end
 end
@@ -65,11 +66,13 @@ configure :test, :development do
     r.first_name = 'Steve'
     r.last_name = 'Emploi'
     r.email = 'steve.e@lunchstatus.com'
+    r.user_name = 'steve.e'
   end
   Person.create do |r|
     r.first_name = 'Jack'
     r.last_name = 'Bauer'
     r.email = 'dabomb@gmail.com'
+    r.user_name = 'dabomb'
   end
 end
 
@@ -89,8 +92,15 @@ get '/meals/:id' do
   Meal[params[:id]].deadline.to_s
 end
 
+post '/people/create' do
+  @username = params[:username]
+  @organization = params[:organization]
+  @person = Person.create(:user_name => @username)
+  redirect "/people/#{@person.id}"
+end
+
 get '/people/:id' do
-  Person[params[:id]].full_name.to_s
+  Person[params[:id]].user_name.to_s
 end
 
 use_in_file_templates!
