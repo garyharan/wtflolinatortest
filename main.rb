@@ -36,6 +36,7 @@ configure do
     varchar :last_name
     varchar :user_name
     varchar :email
+    integer :team_id
   end
 end
 
@@ -44,8 +45,13 @@ end
 # --------------------------------------------------
 configure do
   class Meal < Sequel::Model; end
-  class Team < Sequel::Model; end
+  class Team < Sequel::Model
+    one_to_many :members, :class_name => 'Person'
+  end
   class Person < Sequel::Model
+    many_to_one :team
+    validates_presence_of :user_name
+    
     def full_name
       [first_name, last_name].join(' ').strip
     end
@@ -55,11 +61,12 @@ end
 # --------------------------------------------------
 # Fixtures
 # --------------------------------------------------
-configure :test, :development do
+configure :development, :test do
   Meal.create do |r|
     r.deadline = Time.now + (60 * 60 * 3)
   end
   Team.create do |r|
+    r.id   = 1
     r.name = 'Standout Jobs'
   end
   Person.create do |r|
@@ -73,6 +80,7 @@ configure :test, :development do
     r.last_name = 'Bauer'
     r.email = 'dabomb@gmail.com'
     r.user_name = 'dabomb'
+    r.team_id = 1
   end
 end
 
@@ -81,6 +89,10 @@ end
 # --------------------------------------------------
 get '/' do
   erb :home, :views_directory => File.dirname(__FILE__) + "/views"
+end
+
+get '/teams' do
+  erb "<% for e in Team.dataset %><p><%= e.id %> <%= e.name %><% end %>"
 end
 
 get '/teams/:id' do
@@ -92,11 +104,20 @@ get '/meals/:id' do
   Meal[params[:id]].deadline.to_s
 end
 
-post '/people/create' do
+post '/account/create' do
   @username = params[:username]
   @organization = params[:organization]
-  @person = Person.create(:user_name => @username)
-  redirect "/people/#{@person.id}"
+  @team = Team.find_or_create(:name => @organization)
+  @person = @team.members_dataset[:user_name => @username]
+  if @person
+    @notice = "#{@username} exists already on this team."
+    redirect '/'
+  else
+    @notice = "Successfully created #{@username}"
+    @person = Person.create(:user_name => @username)
+    @team.add_member(@person)
+    redirect "/people/#{@person.id}"
+  end
 end
 
 get '/people/:id' do

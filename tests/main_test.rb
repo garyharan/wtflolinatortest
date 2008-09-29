@@ -1,6 +1,8 @@
 require 'tests/test_helper'
 require File.join(File.dirname(__FILE__), '../main')
 
+
+
 # --------------------------------------------------
 # Models
 # --------------------------------------------------
@@ -12,6 +14,27 @@ describe "Meal" do
   it "should have a deadline" do
     Factory(:meal, :deadline => Time.now)
     Meal.first.deadline.should.not.be.nil
+  end
+  
+  after(:all) do
+    Meal.dataset.delete
+  end
+end
+
+context "Team" do
+  before(:each) do
+    @team = Factory.build(:team)
+  end
+  
+  specify "should save" do
+    test_team = Team.create do |t|
+      t.name = 'Some Team'
+    end
+    test_team.name.should.be.equal 'Some Team'
+  end
+  
+  after(:all) do
+    Team.dataset.delete
   end
 end
 
@@ -47,6 +70,10 @@ describe "Person" do
     @person.first_name = nil
     @person.full_name.should.equal 'Sinatra'
   end
+  
+  after(:all) do
+    Person.dataset.delete
+  end
 end
 
 # --------------------------------------------------
@@ -65,20 +92,29 @@ context "root" do
   end
   
   specify "should show an existing name if one was previously saved (from cookies)" do
-    
+    # puts Team.association_reflection(:members).inspect
   end
 end
 
-context "/people/create" do
-  specify "should create a person" do
+context "/account/create" do  
+  specify "should create a team and a person if they do not exist yet" do
+    puts Team.dataset.all.inspect
     lambda {
-        post_it "/people/create", {:username => "Jack", :organization => "Sheppard"}
+      lambda {
+          post_it "/account/create", {:username => "Harry", :organization => "Standout Jobs"}
+      }.should change(Team.dataset, 'count').by(1)
+      
     }.should change(Person.dataset, 'count').by(1)
+    should.be.redirection
+  end
+  
+  after(:all) do
+    Team.dataset.delete
+    Person.dataset.delete
   end
 end
 
 describe "/teams/:id" do
-
   it "should return the team's name" do
     t = Factory(:team, :name => 'cheezburger')
     get_it "/teams/#{t.id}"

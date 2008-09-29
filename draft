@@ -14,3 +14,20 @@ o Person
   - name
   - last_name
   - email
+
+
+*  no name
+  *  sign up with username, organization
+  *  store a cookie
+    *  go to person page
+
+* cookie exists
+  *  show team page
+  *  show dates
+  
+* teams page
+
+* lunch page
+  *  show members
+  *  show meals
+  *  tally up votes
